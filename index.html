@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>루틴화 학습습관</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Gaegu:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* Layout: one phone-width column on graph-notebook paper, bottom tab bar; stamps and highlighter marks as the reward language */
+:root{
+  --paper:#F6F8FC; --grid:#E4EAF3; --card:#FFFFFF; --line:#D6DEEB;
+  --ink:#1B2A44; --ink-2:#5B6B85; --pen:#2F5BEA; --hl:#FFE36E; --on-hl:#1B2A44;
+  --stamp:#D9473A; --leaf:#2F8F5E; --soft:#EEF2FA;
+  --f-disp:"Do Hyeon","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --f-hand:"Gaegu","Apple SD Gothic Neo","Malgun Gothic",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#111827; --grid:#1A2436; --card:#172034; --line:#2A3852;
+  --ink:#E7EDF7; --ink-2:#9DAAC0; --pen:#7C9BFF; --hl:rgba(232,197,71,.42); --on-hl:#111827;
+  --stamp:#FF7A66; --leaf:#5CC690; --soft:#1E2A42; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#111827; --grid:#1A2436; --card:#172034; --line:#2A3852;
+  --ink:#E7EDF7; --ink-2:#9DAAC0; --pen:#7C9BFF; --hl:rgba(232,197,71,.42); --on-hl:#111827;
+  --stamp:#FF7A66; --leaf:#5CC690; --soft:#1E2A42; color-scheme:dark}
+*{box-sizing:border-box}
+body{background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px;color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.app{max-width:440px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 120px;display:flex;flex-direction:column;gap:14px}
+h1,h2,h3{margin:0;font-weight:400;text-wrap:balance}
+h2{font-family:var(--f-disp);font-size:21px}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--pen);outline-offset:2px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:var(--f-disp);font-size:28px;letter-spacing:.5px}
+.brand small{display:block;font-family:var(--f-body);font-size:12px;color:var(--ink-2);letter-spacing:0}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill b{font-family:var(--f-disp);font-weight:400;font-size:17px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.muted{color:var(--ink-2);font-size:13px}
+.hl{background:linear-gradient(transparent 52%,var(--hl) 52%);padding:0 2px}
+.row{display:flex;align-items:center;gap:10px;min-width:0}
+.between{justify-content:space-between}
+.btn{border:1px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:10px;padding:9px 14px;font-weight:600;font-size:14px;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.pen{background:var(--pen);border-color:var(--pen);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{border:0;background:none;padding:0;color:var(--pen);font-size:13px;text-decoration:underline;text-underline-offset:3px}
+.banner{border:1px dashed var(--ink-2);border-radius:12px;padding:10px 12px;font-size:13px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--soft)}
+/* hero */
+.hero{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
+.streak{font-family:var(--f-disp);font-size:58px;line-height:1;font-variant-numeric:tabular-nums}
+.streak span{font-size:20px;margin-left:4px}
+.xp{height:10px;border-radius:99px;background:var(--soft);border:1px solid var(--line);overflow:hidden}
+.xp i{display:block;height:100%;background:var(--leaf);border-radius:99px;transition:width .5s}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;border-radius:999px;padding:3px 10px;background:var(--soft);border:1px solid var(--line)}
+/* goals */
+.goals{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none}
+.goal{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px dashed var(--line)}
+.goal:first-child{border-top:0}
+.circle{width:40px;height:40px;border-radius:50%;border:2px dashed var(--line);background:none;display:grid;place-items:center;position:relative;padding:0}
+.stampmark{width:40px;height:40px;border-radius:50%;border:2.5px solid var(--stamp);color:var(--stamp);font-family:var(--f-hand);font-weight:700;font-size:15px;display:grid;place-items:center;transform:rotate(-14deg)}
+.gtitle{font-weight:600}
+.gtitle.done{color:var(--ink-2);text-decoration:line-through;text-decoration-color:var(--stamp)}
+.gsub{font-size:13px;color:var(--ink-2)}
+.del{border:0;background:none;color:var(--ink-2);font-size:12px;padding:4px}
+form.addform{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+form.addform label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink-2);min-width:0}
+form.addform .full{grid-column:1/-1}
+input,select,textarea{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:9px 10px;width:100%;min-width:0;font-size:15px}
+textarea{resize:vertical;min-height:64px}
+.sentence{font-family:var(--f-hand);font-size:20px;line-height:1.35}
+.coach{display:grid;grid-template-columns:36px 1fr;gap:10px;align-items:start}
+.coach .av{width:36px;height:36px;border-radius:10px;background:var(--pen);color:#fff;display:grid;place-items:center;font-family:var(--f-disp);font-size:15px}
+.note{font-family:var(--f-hand);font-size:19px;line-height:1.35;background:var(--soft);border-radius:4px 14px 14px 14px;padding:10px 12px;border:1px solid var(--line)}
+/* timer */
+.ringwrap{display:grid;place-items:center;position:relative;padding:6px 0}
+.ring{width:min(240px,70vw);height:auto;max-width:100%}
+.ring .track{stroke:var(--line)}
+.ring .prog{stroke:var(--pen);transition:stroke-dashoffset .3s linear}
+.ring.break .prog{stroke:var(--leaf)}
+.time{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.time b{font-family:var(--f-disp);font-weight:400;font-size:54px;font-variant-numeric:tabular-nums;line-height:1}
+.ctrls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.proofprev{display:flex;gap:10px;align-items:center}
+.proofprev img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+/* week */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--paper)}
+.stat b{display:block;font-family:var(--f-disp);font-weight:400;font-size:26px;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat span{font-size:12px;color:var(--ink-2)}
+.chart{width:100%;height:auto;display:block}
+.chart text{fill:var(--ink-2);font-family:var(--f-body);font-size:11px}
+.chart .val{fill:var(--ink);font-weight:600}
+.chart .bar{fill:var(--pen)}
+.chart .bar.low{fill:var(--stamp)}
+.chart .base{stroke:var(--line)}
+.chart .target{stroke:var(--ink-2);stroke-dasharray:4 4}
+.chart .rest{fill:none;stroke:var(--ink-2);stroke-dasharray:3 3}
+/* mates */
+.mate{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-top:1px dashed var(--line)}
+.mate:first-child{border-top:0}
+.face{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-disp);font-size:17px;background:var(--soft);border:1px solid var(--line)}
+.face.me{background:var(--hl);color:var(--on-hl);border-color:transparent}
+.dots{display:flex;gap:4px;margin-top:3px}
+.dots i{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--leaf)}
+.dots i.on{background:var(--leaf)}
+.teambar{height:12px;border-radius:99px;background:var(--soft);border:1px solid var(--line);overflow:hidden}
+.teambar i{display:block;height:100%;background:var(--hl)}
+/* nav */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--card);border-top:1px solid var(--line);padding:6px max(16px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.nav div{max-width:440px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.nav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:12px;color:var(--ink-2);border-radius:10px}
+.nav button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav button[aria-current="page"]{color:var(--ink);background:var(--soft);font-weight:600}
+/* overlay */
+.overlay{position:fixed;inset:0;z-index:20;background:rgba(17,24,39,.55);display:grid;place-items:center;padding:24px}
+.bigstamp{width:190px;height:190px;border-radius:50%;border:6px double var(--stamp);color:var(--stamp);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(-12deg);font-family:var(--f-hand);text-align:center;animation:thump .45s cubic-bezier(.2,1.6,.4,1)}
+.bigstamp b{font-size:44px;line-height:1}
+.bigstamp span{font-size:18px;font-weight:700}
+@keyframes thump{from{transform:rotate(-12deg) scale(1.8);opacity:0}to{transform:rotate(-12deg) scale(1);opacity:1}}
+@media (prefers-reduced-motion: reduce){.bigstamp{animation:none}.xp i,.ring .prog{transition:none}}
+.toast{font-size:13px;color:var(--leaf);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="top">
+    <div class="brand">루틴화<small id="today-label">오늘</small></div>
+    <div class="pill" title="모은 포인트"><b id="pts">0</b>P</div>
+  </header>
+
+  <!-- 오늘 -->
+  <section id="v-today" class="view" aria-label="오늘">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div id="example-banner"></div>
+      <div class="card">
+        <div class="hero">
+          <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+            <div class="muted">연속으로 공부한 날</div>
+            <div class="streak" id="streak">0<span>일째</span></div>
+            <div class="chips" id="hero-chips"></div>
+          </div>
+          <div id="plant" aria-hidden="true"></div>
+        </div>
+        <div>
+          <div class="row between muted"><span id="lv-label">Lv.1 씨앗</span><span id="xp-label">0 / 100P</span></div>
+          <div class="xp" role="progressbar" aria-label="다음 레벨까지" id="xpbar"><i id="xp" style="width:0%"></i></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="row between"><h2>오늘의 작은 목표</h2><span class="pill" id="today-progress">0/0</span></div>
+        <ul class="goals" id="goals"></ul>
+        <button class="btn ghost" id="add-toggle" type="button">+ 목표 추가하기</button>
+        <form class="addform" id="addform" hidden>
+          <label class="full">무엇을 할까요<input id="f-subject" required maxlength="20" placeholder="예: 수학 문제집 2쪽"></label>
+          <label>몇 분<select id="f-min"><option>5</option><option>10</option><option selected>15</option><option>20</option><option>25</option><option>30</option></select></label>
+          <label>언제<input id="f-time" type="time" value="19:30"></label>
+          <label class="full">어디서<input id="f-place" maxlength="16" placeholder="예: 내 책상" value="내 책상"></label>
+          <p class="full muted">이렇게 약속해요</p>
+          <p class="full sentence" id="f-preview"></p>
+          <div class="full row" style="justify-content:flex-end"><button class="btn ghost" type="button" id="add-cancel">취소</button><button class="btn" type="submit">목표 저장</button></div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="coach"><div class="av">AI</div><div style="display:flex;flex-direction:column;gap:6px;min-width:0"><span class="muted">AI 습관 코치</span><p class="note" id="coach-today"></p></div></div>
+      </div>
+
+      <div class="card">
+        <h2>쉼표권</h2>
+        <p class="muted">아프거나 바쁜 날 하루를 쉬어도 연속 기록이 끊기지 않아요. 한 번 빠졌다고 처음부터 다시 시작하지 않아도 돼요.</p>
+        <div class="row" style="flex-wrap:wrap"><button class="btn ghost" id="use-rest" type="button">오늘 쉼표권 쓰기</button><button class="btn ghost" id="buy-rest" type="button">50P로 쉼표권 받기</button></div>
+        <p class="toast" id="rest-msg" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 집중 -->
+  <section id="v-focus" class="view" aria-label="집중 타이머" hidden>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <label class="muted" for="t-goal">지금 할 목표</label>
+        <select id="t-goal"></select>
+        <div class="ringwrap">
+          <svg class="ring" id="ring" viewBox="0 0 200 200" role="img" aria-label="남은 시간">
+            <circle class="track" cx="100" cy="100" r="88" fill="none" stroke-width="10"/>
+            <circle class="prog" id="ring-prog" cx="100" cy="100" r="88" fill="none" stroke-width="10" stroke-linecap="round" transform="rotate(-90 100 100)" stroke-dasharray="552.9" stroke-dashoffset="0"/>
+          </svg>
+          <div class="time"><span class="muted" id="t-mode">집중 시간</span><b id="t-left">15:00</b><span class="muted" id="t-hint">시작을 누르면 시작해요</span></div>
+        </div>
+        <div class="ctrls">
+          <button class="btn pen" id="t-start" type="button">시작</button>
+          <button class="btn ghost" id="t-reset" type="button">처음으로</button>
+        </div>
+        <button class="link" id="t-fast" type="button" style="align-self:center">시연용: 3초 남기기</button>
+      </div>
+      <div class="card">
+        <h2>공부 인증</h2>
+        <p class="muted">공책이나 문제집 사진을 올리면 끝냈을 때 인증 보너스 5P를 더 받아요. 사진은 이 기기에서만 미리 보고 저장하지 않아요.</p>
+        <input type="file" id="proof" accept="image/*">
+        <div class="proofprev" id="proof-prev"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 돌아보기 -->
+  <section id="v-week" class="view" aria-label="주간 돌아보기" hidden>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <h2>최근 7일</h2>
+        <div class="stats">
+          <div class="stat"><b id="w-min">0</b><span>공부한 시간(분)</span></div>
+          <div class="stat"><b id="w-rate">0%</b><span>목표 달성률</span></div>
+          <div class="stat"><b id="w-days">0</b><span>공부한 날</span></div>
+        </div>
+        <svg class="chart" id="chart" viewBox="0 0 330 176" role="img" aria-label="최근 7일 공부 시간 막대그래프"></svg>
+        <p class="muted">빨간 막대는 목표 시간의 절반도 못 채운 날이에요. 점선 상자는 쉼표권을 쓴 날이에요.</p>
+      </div>
+      <div class="card">
+        <div class="coach"><div class="av">AI</div><div style="display:flex;flex-direction:column;gap:8px;min-width:0"><span class="muted">AI 코치의 이번 주 분석</span><p class="note" id="coach-week"></p><div id="coach-action"></div></div></div>
+      </div>
+      <div class="card">
+        <h2>나의 돌아보기</h2>
+        <label class="muted" for="r-good">이번 주에 잘한 점 1개</label>
+        <textarea id="r-good" maxlength="200" placeholder="예: 버스에서 영어 단어를 매일 외웠다"></textarea>
+        <label class="muted" for="r-change">다음 주에 바꿀 점 1개</label>
+        <textarea id="r-change" maxlength="200" placeholder="예: 학원 없는 화요일에도 15분은 하기"></textarea>
+        <div class="row between"><p class="toast" id="r-msg" aria-live="polite"></p><button class="btn" id="r-save" type="button">저장</button></div>
+      </div>
+      <div class="card">
+        <div class="row" style="justify-content:flex-start"><div class="face">멘</div><div><b>대학생 멘토</b><p class="muted">예시 멘토 · 매주 일요일 기록 확인</p></div></div>
+        <p class="note">이번 주 영어 단어는 하루도 안 빠졌네요! 화요일만 같이 방법을 찾아봐요. 짧게라도 하는 게 안 하는 것보다 훨씬 나아요.</p>
+        <button class="btn ghost" id="send-mentor" type="button">멘토에게 이번 주 기록 보내기</button>
+        <p class="muted" id="mentor-msg" aria-live="polite"></p>
+      </div>
+      <div class="card">
+        <h2>기록 관리</h2>
+        <p class="muted">기록은 이 기기의 브라우저에만 저장돼요.</p>
+        <button class="btn ghost" id="reset" type="button">기록 지우고 새로 시작</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 메이트 -->
+  <section id="v-mates" class="view" aria-label="스터디 메이트" hidden>
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="row between"><h2>저녁 8시 스터디</h2><span class="chip">예시 팀</span></div>
+        <p class="muted">4명이 서로의 인증을 확인해요. 누군가 지켜보고 있으면 오늘도 하게 돼요.</p>
+        <div>
+          <div class="row between muted"><span>이번 주 팀 목표: 모두 5일 이상 공부하기</span><span id="team-pct">0%</span></div>
+          <div class="teambar"><i id="team-bar" style="width:0%"></i></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>오늘 현황</h2>
+        <div id="mates"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<nav class="nav" aria-label="화면 이동"><div>
+  <button type="button" data-v="today" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>오늘</button>
+  <button type="button" data-v="focus"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>집중</button>
+  <button type="button" data-v="week"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>돌아보기</button>
+  <button type="button" data-v="mates"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.6"/><path d="M17 14.5c2.4 0 4 1.5 4.5 4"/></svg>메이트</button>
+</div></nav>
+
+<div class="overlay" id="overlay" hidden><div class="bigstamp" id="bigstamp"><span>참 잘했어요</span><b>완료</b><span id="stamp-pts">+10P</span></div></div>
+
+<script>
+(function(){
+const KEY='hangeoleum-v1';
+const WD=['일','월','화','수','목','금','토'];
+const STAGES=['씨앗','새싹','떡잎','어린 나무','큰 나무'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function ds(off){const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+(off||0));return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function dobj(off){const d=new Date();d.setDate(d.getDate()+(off||0));return d;}
+function koTime(t){if(!t)return'';const[h,m]=t.split(':').map(Number);const l=h<6?'새벽':h<12?'아침':h<18?'오후':'저녁';return l+' '+(h%12||12)+':'+String(m).padStart(2,'0');}
+const SEED_GOALS=[
+  {id:'g1',subject:'영어 단어 20개',min:10,time:'07:40',place:'등교 버스'},
+  {id:'g2',subject:'수학 문제집 2쪽',min:15,time:'20:00',place:'내 책상'},
+  {id:'g3',subject:'국어 비문학 1지문',min:15,time:'21:00',place:'거실 식탁'}];
+function seed(){
+  const hist={};
+  [[-6,['g1','g2','g3'],40],[-5,['g1','g2'],25],[-4,[],0,true],[-3,['g1','g2','g3'],40],[-2,['g1'],10],[-1,['g1','g2','g3'],45]]
+    .forEach(([o,done,min,rest])=>{hist[ds(o)]={done,min,rest:!!rest};});
+  return {goals:JSON.parse(JSON.stringify(SEED_GOALS)),hist,points:180,rests:1,example:true,reflect:{},cheers:{},mentorSent:false};
+}
+let S=null;
+try{S=JSON.parse(localStorage.getItem(KEY));}catch(e){S=null;}
+if(!S||!Array.isArray(S.goals))S=seed();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function rec(d){return S.hist[d]||{done:[],min:0,rest:false};}
+function wrec(d){if(!S.hist[d])S.hist[d]={done:[],min:0,rest:false};return S.hist[d];}
+function active(r){return r.done.length>0||r.rest;}
+function streak(){let n=0,o=active(rec(ds(0)))?0:-1;while(n<400&&active(rec(ds(o)))){n++;o--;}return n;}
+function level(){return Math.floor(S.points/100);}
+
+function plantSVG(st){
+  let leaves='';const h=14+st*9;const top=62-h;
+  for(let i=0;i<st;i++){const y=60-10-i*9;leaves+=`<path d="M36 ${y} q-12 -2 -16 -10 q12 -1 16 8z" fill="var(--leaf)"/><path d="M36 ${y-4} q12 -2 16 -10 q-12 -1 -16 8z" fill="var(--leaf)" opacity=".8"/>`;}
+  const bud=st===0?`<ellipse cx="36" cy="58" rx="5" ry="3.5" fill="var(--leaf)"/>`:`<line x1="36" y1="62" x2="36" y2="${top}" stroke="var(--leaf)" stroke-width="2.5" stroke-linecap="round"/>`;
+  const crown=st>=4?`<circle cx="36" cy="${top-2}" r="9" fill="var(--leaf)" opacity=".9"/>`:'';
+  return `<svg viewBox="0 0 72 86" width="84" height="100">${bud}${leaves}${crown}<path d="M20 62h32l-4 20H24z" fill="var(--soft)" stroke="var(--ink-2)" stroke-width="1.5"/><path d="M18 62h36" stroke="var(--ink-2)" stroke-width="2" stroke-linecap="round"/></svg>`;
+}
+
+/* ---------- 오늘 ---------- */
+function renderToday(){
+  const d=dobj(0);$('today-label').textContent=(d.getMonth()+1)+'월 '+d.getDate()+'일 '+WD[d.getDay()]+'요일';
+  $('pts').textContent=S.points;
+  $('example-banner').innerHTML=S.example?`<div class="banner"><span>지금 보이는 기록과 팀원은 예시예요.</span><button class="link" type="button" id="start-fresh">내 기록으로 새로 시작</button></div>`:'';
+  if(S.example)$('start-fresh').onclick=()=>{resetAll();};
+  const st=streak();$('streak').innerHTML=st+'<span>일째</span>';
+  const lv=level(),stage=Math.min(4,lv);
+  $('plant').innerHTML=plantSVG(stage);
+  $('lv-label').textContent='Lv.'+(lv+1)+' '+STAGES[stage];
+  $('xp-label').textContent=(S.points%100)+' / 100P';$('xp').style.width=(S.points%100)+'%';
+  $('hero-chips').innerHTML=`<span class="chip">쉼표권 ${S.rests}장</span>`+(st>=3?`<span class="chip">3일 연속 보너스 +5P</span>`:'');
+  const r=rec(ds(0));
+  const goals=[...S.goals].sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  $('today-progress').textContent=r.done.filter(id=>S.goals.some(g=>g.id===id)).length+'/'+S.goals.length;
+  $('goals').innerHTML=goals.length?goals.map(g=>{const done=r.done.includes(g.id);return `<li class="goal">
+    ${done?`<div class="stampmark" aria-label="완료">완료</div>`:`<button class="circle" type="button" data-start="${g.id}" aria-label="${esc(g.subject)} 시작"></button>`}
+    <div style="min-width:0"><div class="gtitle ${done?'done':''}">${esc(g.subject)} <span class="hl">${g.min}분</span></div><div class="gsub">${esc(koTime(g.time))} · ${esc(g.place||'')}에서</div></div>
+    <div class="row" style="gap:2px">${done?'':`<button class="btn" type="button" data-start="${g.id}">시작</button>`}<button class="del" type="button" data-del="${g.id}" aria-label="${esc(g.subject)} 삭제">삭제</button></div></li>`;}).join(''):`<li class="muted" style="padding:8px 0">아직 목표가 없어요. 5분짜리 작은 목표부터 만들어 보세요.</li>`;
+  document.querySelectorAll('[data-start]').forEach(b=>b.onclick=()=>{selectGoal(b.dataset.start);go('focus');});
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{S.goals=S.goals.filter(g=>g.id!==b.dataset.del);save();renderAll();});
+  // coach
+  const left=goals.filter(g=>!r.done.includes(g.id));
+  let msg;
+  if(r.rest)msg='오늘은 쉼표권을 쓴 날이에요. 푹 쉬고 내일 다시 루틴을 이어가요. 연속 기록은 그대로예요.';
+  else if(!goals.length)msg='목표는 작을수록 좋아요. "언제, 어디서, 몇 분"까지 정하면 실제로 할 확률이 훨씬 올라가요.';
+  else if(!left.length)msg=`오늘 목표 ${goals.length}개를 모두 끝냈어요! ${st}일째 이어가는 중이에요. 내일도 같은 시간에 알려줄게요.`;
+  else{const n=left[0];msg=`다음은 ${koTime(n.time)}, ${n.place}에서 ${n.subject} ${n.min}분이에요. 길게 말고 딱 ${n.min}분만 해볼까요?`+(st>=3?` 오늘 하면 ${st+(r.done.length?0:1)}일 연속이에요.`:'');}
+  $('coach-today').textContent=msg;
+  $('use-rest').disabled=!(S.rests>0&&!active(r));
+  $('buy-rest').disabled=S.points<50;
+}
+$('add-toggle').onclick=()=>{$('addform').hidden=false;$('add-toggle').hidden=true;updatePreview();$('f-subject').focus();};
+$('add-cancel').onclick=()=>{$('addform').hidden=true;$('add-toggle').hidden=false;};
+['f-subject','f-min','f-time','f-place'].forEach(id=>$(id).addEventListener('input',updatePreview));
+function updatePreview(){const s=$('f-subject').value.trim()||'○○';$('f-preview').textContent=`${koTime($('f-time').value)}에 ${$('f-place').value.trim()||'○○'}에서 ${s} ${$('f-min').value}분 하기`;}
+$('addform').addEventListener('submit',e=>{e.preventDefault();const s=$('f-subject').value.trim();if(!s)return;
+  S.goals.push({id:'g'+Date.now(),subject:s,min:+$('f-min').value,time:$('f-time').value,place:$('f-place').value.trim()||'내 책상'});
+  save();$('f-subject').value='';$('addform').hidden=true;$('add-toggle').hidden=false;renderAll();});
+$('use-rest').onclick=()=>{if(S.rests<1)return;S.rests--;wrec(ds(0)).rest=true;save();$('rest-msg').textContent='쉼표권을 썼어요. 연속 기록이 이어져요.';renderAll();};
+$('buy-rest').onclick=()=>{if(S.points<50)return;S.points-=50;S.rests++;save();$('rest-msg').textContent='쉼표권 1장을 받았어요.';renderAll();};
+
+/* ---------- 집중 ---------- */
+const C=552.9;
+let T={mode:'focus',total:900,left:900,running:false,endAt:0,goalId:null,proof:false};let tick=null;
+function fmt(s){s=Math.ceil(s);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');}
+function goalById(id){return S.goals.find(g=>g.id===id);}
+function fillGoalSelect(){
+  const r=rec(ds(0));const opts=S.goals.filter(g=>!r.done.includes(g.id));
+  $('t-goal').innerHTML=opts.map(g=>`<option value="${g.id}">${esc(g.subject)} · ${g.min}분</option>`).join('')+`<option value="free">자유 공부 · 25분</option>`;
+  if(T.goalId&&(T.goalId==='free'||opts.some(g=>g.id===T.goalId)))$('t-goal').value=T.goalId;else{T.goalId=$('t-goal').value;const g=goalById(T.goalId);if(!T.running&&T.mode==='focus'){T.total=T.left=(g?g.min:25)*60;}}
+  $('t-goal').disabled=T.running;
+}
+function selectGoal(id){stop();T.goalId=id;const g=goalById(id);T.mode='focus';T.total=T.left=(g?g.min:25)*60;fillGoalSelect();drawTimer();}
+$('t-goal').onchange=()=>selectGoal($('t-goal').value);
+function drawTimer(){
+  $('t-left').textContent=fmt(T.left);
+  $('ring-prog').setAttribute('stroke-dashoffset',String(C*(1-T.left/T.total)));
+  $('ring').classList.toggle('break',T.mode==='break');
+  $('t-mode').textContent=T.mode==='break'?'쉬는 시간':'집중 시간';
+  $('t-hint').textContent=T.running?(T.mode==='break'?'일어나서 물 한 잔':'휴대폰은 잠깐 뒤집어 두기'):(T.left<T.total?'잠시 멈췄어요':'시작을 누르면 시작해요');
+  $('t-start').textContent=T.running?'잠깐 멈춤':(T.left<T.total?'이어서 하기':(T.mode==='break'?'쉬는 시간 시작':'시작'));
+}
+function stop(){T.running=false;clearInterval(tick);tick=null;}
+$('t-start').onclick=()=>{if(T.running){T.left=Math.max(0,(T.endAt-Date.now())/1000);stop();}else{T.running=true;T.endAt=Date.now()+T.left*1000;tick=setInterval(step,250);}fillGoalSelect();drawTimer();};
+$('t-reset').onclick=()=>{stop();T.mode='focus';const g=goalById(T.goalId);T.total=T.left=(g?g.min:25)*60;fillGoalSelect();drawTimer();};
+$('t-fast').onclick=()=>{if(!T.running){T.running=true;tick=setInterval(step,250);}T.endAt=Date.now()+3000;T.left=3;fillGoalSelect();drawTimer();};
+function step(){T.left=Math.max(0,(T.endAt-Date.now())/1000);drawTimer();if(T.left<=0)finish();}
+function finish(){
+  stop();
+  if(T.mode==='focus'){
+    const g=goalById(T.goalId);const r=wrec(ds(0));const mins=g?g.min:25;
+    const wasActive=active(r);
+    if(g&&!r.done.includes(g.id))r.done.push(g.id);else if(!g)r.done.push('free-'+Date.now());
+    r.min+=mins;
+    const st=streak();let pts=10+(st>=3?5:0)+(T.proof?5:0);
+    S.points+=pts;save();
+    $('stamp-pts').textContent='+'+pts+'P'+(T.proof?' (인증 포함)':'');
+    $('overlay').hidden=false;setTimeout(()=>{$('overlay').hidden=true;},2400);
+    T.proof=false;$('proof').value='';$('proof-prev').innerHTML='';
+    T.mode='break';T.total=T.left=300;
+    renderAll();
+  }else{
+    T.mode='focus';const r=rec(ds(0));const next=S.goals.find(g=>!r.done.includes(g.id));T.goalId=next?next.id:'free';T.total=T.left=(next?next.min:25)*60;fillGoalSelect();
+  }
+  drawTimer();
+}
+$('overlay').onclick=()=>{$('overlay').hidden=true;};
+$('proof').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f){T.proof=false;$('proof-prev').innerHTML='';return;}
+  const rd=new FileReader();rd.onload=()=>{$('proof-prev').innerHTML=`<img alt="인증 사진 미리보기" src="${rd.result}"><span class="toast">인증 사진을 올렸어요. 끝내면 +5P</span>`;T.proof=true;};rd.readAsDataURL(f);});
+
+/* ---------- 돌아보기 ---------- */
+function weekData(){const out=[];for(let o=-6;o<=0;o++){const r=rec(ds(o));out.push({o,d:dobj(o),r});}return out;}
+function renderWeek(){
+  const w=weekData();const goalMin=S.goals.reduce((a,g)=>a+g.min,0)||1;const gN=S.goals.length||1;
+  let tot=0,exp=0,done=0,days=0;
+  w.forEach(x=>{tot+=x.r.min;if(x.r.done.length)days++;if(!x.r.rest&&(x.o<0||x.r.done.length)){exp+=gN;done+=Math.min(gN,x.r.done.length);}});
+  const rate=exp?Math.round(done/exp*100):0;
+  $('w-min').textContent=tot;$('w-rate').textContent=rate+'%';$('w-days').textContent=days+'일';
+  // chart
+  const W=330,H=176,L=8,B=146,top=24,bw=30,gap=(W-L*2-bw*7)/6;
+  const max=Math.max(goalMin,...w.map(x=>x.r.min),10);const sc=v=>(B-top)*v/max;
+  let s=`<line class="base" x1="${L}" x2="${W-L}" y1="${B}" y2="${B}"/>`;
+  const ty=B-sc(goalMin);s+=`<line class="target" x1="${L}" x2="${W-L}" y1="${ty}" y2="${ty}"/><text x="${W-L}" y="${ty-5}" text-anchor="end">하루 목표 ${goalMin}분</text>`;
+  w.forEach((x,i)=>{const cx=L+i*(bw+gap);const h=sc(x.r.min);const lab=(x.o===0?'오늘':WD[x.d.getDay()]);
+    if(x.r.rest){s+=`<rect class="rest" x="${cx+1}" y="${B-28}" width="${bw-2}" height="27" rx="4"/><text x="${cx+bw/2}" y="${B-10}" text-anchor="middle">쉼</text>`;}
+    else if(x.r.min>0){s+=`<rect class="bar ${x.r.min<goalMin/2?'low':''}" x="${cx}" y="${B-h}" width="${bw}" height="${h}" rx="4"/><text class="val" x="${cx+bw/2}" y="${B-h-5}" text-anchor="middle">${x.r.min}</text>`;}
+    else{s+=`<text x="${cx+bw/2}" y="${B-6}" text-anchor="middle">0</text>`;}
+    s+=`<text x="${cx+bw/2}" y="${B+18}" text-anchor="middle">${lab}</text>`;});
+  $('chart').innerHTML=s;
+  // coach
+  const past=w.filter(x=>x.o<0&&!x.r.rest);let weak=null;past.forEach(x=>{if(!weak||x.r.min<weak.r.min)weak=x;});
+  let msg,act='';
+  if(rate>=80){msg=`달성률 ${rate}%, 정말 꾸준했어요! 이제 목표가 조금 쉬워 보일 때예요. 모든 목표를 5분씩 늘려볼까요?`;act=`<button class="btn pen" type="button" id="adj" data-d="5">모든 목표 +5분</button>`;}
+  else if(rate>=50){msg=`달성률 ${rate}%로 좋은 흐름이에요.`+(weak?` 다만 ${WD[weak.d.getDay()]}요일엔 ${weak.r.min}분만 했어요. 그날은 목표를 하나만 남기거나, 더 이른 시간으로 옮겨 보는 건 어때요?`:'');}
+  else{msg=`달성률 ${rate}%예요. 의지가 부족한 게 아니라 목표가 커서 그래요. 모든 목표를 5분씩 줄여서 "매일 하는 것"부터 성공해 봐요.`;act=`<button class="btn pen" type="button" id="adj" data-d="-5">모든 목표 -5분</button>`;}
+  $('coach-week').textContent=msg;$('coach-action').innerHTML=act;
+  if(act)$('adj').onclick=e=>{const dlt=+e.currentTarget.dataset.d;S.goals.forEach(g=>{g.min=Math.max(5,Math.min(60,g.min+dlt));});save();$('coach-action').innerHTML='<p class="toast">목표 시간을 바꿨어요.</p>';renderToday();};
+  const wk=ds(-((new Date()).getDay()));const rf=S.reflect[wk]||{};
+  if(document.activeElement!==$('r-good'))$('r-good').value=rf.good||'';
+  if(document.activeElement!==$('r-change'))$('r-change').value=rf.change||'';
+  $('mentor-msg').textContent=S.mentorSent?'시연용 화면이에요. 실제 앱에서는 이 기록이 멘토에게 전달돼요.':'';
+}
+$('r-save').onclick=()=>{const wk=ds(-((new Date()).getDay()));S.reflect[wk]={good:$('r-good').value.trim(),change:$('r-change').value.trim()};
+  if(!S.reflect[wk].good&&!S.reflect[wk].change){$('r-msg').style.color='var(--stamp)';$('r-msg').textContent='한 칸 이상 적어 주세요.';return;}
+  $('r-msg').style.color='';S.points+=5;save();$('r-msg').textContent='저장했어요. 돌아보기 +5P';renderToday();};
+$('send-mentor').onclick=()=>{S.mentorSent=true;save();renderWeek();};
+let armed=false,armT=null;
+$('reset').onclick=()=>{if(!armed){armed=true;$('reset').textContent='정말 지울까요? 한 번 더 누르세요';armT=setTimeout(()=>{armed=false;$('reset').textContent='기록 지우고 새로 시작';},4000);return;}clearTimeout(armT);armed=false;$('reset').textContent='기록 지우고 새로 시작';resetAll();};
+function resetAll(){S={goals:S.goals.length?S.goals:JSON.parse(JSON.stringify(SEED_GOALS)),hist:{},points:0,rests:1,example:false,reflect:{},cheers:{},mentorSent:false};save();selectGoal((S.goals[0]||{}).id||'free');renderAll();window.scrollTo(0,0);}
+
+/* ---------- 메이트 ---------- */
+const MATES=[{n:'지민',done:2,of:3,st:9,days:6},{n:'서준',done:1,of:2,st:4,days:5},{n:'하은',done:0,of:2,st:2,days:3}];
+function renderMates(){
+  const r=rec(ds(0));const meDone=r.done.filter(id=>S.goals.some(g=>g.id===id)).length;
+  const meDays=weekData().filter(x=>x.r.done.length).length;
+  const list=[{n:'나',me:true,done:meDone,of:S.goals.length,st:streak(),days:meDays},...(S.example?MATES:[])];
+  $('mates').innerHTML=list.map(m=>{const dots=Array.from({length:m.of},(_,i)=>`<i class="${i<m.done?'on':''}"></i>`).join('');
+    const cheered=S.cheers[m.n];
+    return `<div class="mate"><div class="face ${m.me?'me':''}">${esc(m.n.slice(0,1))}</div>
+      <div style="min-width:0"><b>${esc(m.n)}</b> <span class="muted">· ${m.st}일 연속</span><div class="dots" aria-label="오늘 ${m.done}/${m.of} 완료">${dots}</div></div>
+      ${m.me?`<span class="muted">${m.done}/${m.of}</span>`:`<button class="btn ${cheered?'ghost':''}" type="button" data-cheer="${esc(m.n)}" ${cheered?'disabled':''}>${cheered?'응원 보냄':(m.done<m.of?'콕 찌르기':'응원하기')}</button>`}</div>`;}).join('')
+    +(S.example?'':`<p class="muted" style="padding-top:8px">실제 앱에서는 초대 코드로 친구 2~3명과 팀을 만들어요.</p>`);
+  document.querySelectorAll('[data-cheer]').forEach(b=>b.onclick=()=>{S.cheers[b.dataset.cheer]=true;save();renderMates();});
+  const all=list.length;const ok=list.filter(m=>m.days>=5).length;const pct=Math.round(list.reduce((a,m)=>a+Math.min(5,m.days),0)/(all*5)*100);
+  $('team-pct').textContent=pct+'%';$('team-bar').style.width=pct+'%';
+}
+
+/* ---------- 이동 ---------- */
+function go(v){document.querySelectorAll('.view').forEach(s=>s.hidden=s.id!=='v-'+v);document.querySelectorAll('.nav button').forEach(b=>{if(b.dataset.v===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  if(v==='focus'){fillGoalSelect();drawTimer();}if(v==='week')renderWeek();if(v==='mates')renderMates();window.scrollTo(0,0);}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+function renderAll(){renderToday();fillGoalSelect();drawTimer();renderWeek();renderMates();}
+const first=S.goals.find(g=>!rec(ds(0)).done.includes(g.id));if(first)selectGoal(first.id);else selectGoal('free');
+renderAll();
+})();
+</script>
+
+</body>
+</html>
